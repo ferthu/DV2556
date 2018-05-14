@@ -50,4 +50,5 @@ public:
 	// Pointers to GPU data
 	Ray* ray;
 	Triangle* triangles;
+	size_t triangleCount;
 };

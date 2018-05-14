@@ -2,6 +2,8 @@
 
 TestData::TestData(float hitrate, size_t triangleCount)
 {
+	this->triangleCount = triangleCount;
+
 	Triangle* cpuTriangles = new Triangle[triangleCount];
 	// generate triangles and ray
 	Ray* cpuRay = new Ray();
