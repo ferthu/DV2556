@@ -47,6 +47,7 @@ public:
 	TestData(float hitrate, size_t triangleCount);
 	~TestData();
 
+	// Pointers to GPU data
 	Ray* ray;
 	Triangle* triangles;
 };
