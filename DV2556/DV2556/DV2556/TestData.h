@@ -13,16 +13,19 @@ struct vec3
 		float x, y, z;
 		float coords[3];
 	};
+	__host__ __device__
 	vec3()
 	{
 		x = y = z = 0.0f;
 	}
+	__host__ __device__
 	vec3(float x, float y, float z)
 	{
 		this->x = x;
 		this->y = y;
 		this->z = z;
 	}
+	__host__ __device__
 	vec3(float val)
 	{
 		x = y = z = val;
