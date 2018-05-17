@@ -10,7 +10,10 @@ struct vec3
 {
 	union
 	{
-		float x, y, z;
+		struct
+		{
+			float x, y, z;
+		};
 		float coords[3];
 	};
 	__host__ __device__
@@ -47,10 +50,6 @@ struct vec3
 __host__ __device__ float dot(vec3 a, vec3 b);
 
 __host__ __device__ vec3 cross(vec3 a, vec3 b);
-
-__host__ __device__ vec3 abs(vec3 a);
-
-__host__ __device__ int max_dim(vec3 a);
 
 struct Triangle
 {

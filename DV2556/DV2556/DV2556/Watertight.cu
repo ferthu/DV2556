@@ -46,6 +46,8 @@ int max_dim(vec3 a)
 	return max_dim;
 }
 
+//#define BACKFACE_CULLING
+
 __global__ void watertightTest(Triangle* triangles, Ray* ray, size_t triangleCount, IntersectionResult* resultArray)
 {
 	size_t index = threadIdx.x + blockIdx.x * blockDim.x;
@@ -127,7 +129,7 @@ __global__ void watertightTest(Triangle* triangles, Ray* ray, size_t triangleCou
 		float det = U + V + W;
 		if (det == 0.0f) return;
 
-		// Calculate scaled z-coordinates of vertices and ise them to calculate the hit distance
+		// Calculate scaled z-coordinates of vertices and use them to calculate the hit distance
 		const float Az = Sz * A[kz];
 		const float Bz = Sz * B[kz];
 		const float Cz = Sz * C[kz];
@@ -149,12 +151,18 @@ __global__ void watertightTest(Triangle* triangles, Ray* ray, size_t triangleCou
 		res.hit = true;
 
 		resultArray[index] = res;
+
+		// --------------------------------
+		resultArray[index].distance = (float)dir.z;
+		resultArray[index].distance = A[1];
+		// --------------------------------
 	}
 }
 
 void Watertight::test(TestData* data)
 {
 	const int threadsPerBlock = 256;
-	const size_t blocks = data->triangleCount / threadsPerBlock;
+	size_t blocks = data->triangleCount / threadsPerBlock;
+	if (blocks == 0) blocks = 1;
 	watertightTest<<<blocks, threadsPerBlock>>>(data->triangles, data->ray, data->triangleCount, result);
 }

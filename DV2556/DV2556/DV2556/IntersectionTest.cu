@@ -2,7 +2,7 @@
 
 std::vector<IntersectionResult> IntersectionTest::runTest(TestData* data)
 {
-	std::vector<IntersectionResult> resultVector;
+	std::vector<IntersectionResult> resultVector(data->triangleCount);
 
 	if (result != nullptr)
 	{
@@ -13,9 +13,11 @@ std::vector<IntersectionResult> IntersectionTest::runTest(TestData* data)
 
 	// start timer
 	test(data);
+	cudaDeviceSynchronize();
 	// end timer
 
 	// collect results
+	cudaMemcpy(resultVector.data(), result, data->triangleCount * sizeof(IntersectionResult), cudaMemcpyKind::cudaMemcpyDeviceToHost);
 
 	return resultVector;
 }
