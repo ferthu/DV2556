@@ -30,15 +30,43 @@ struct vec3
 	{
 		x = y = z = val;
 	}
+	__host__ __device__
+	float& operator[](int i)
+	{
+		return coords[i];
+	}
+
+	__host__ __device__
+	const float& operator[](int i) const
+	{
+		return coords[i];
+	}
 };
+
 
 __host__ __device__ float dot(vec3 a, vec3 b);
 
 __host__ __device__ vec3 cross(vec3 a, vec3 b);
 
+__host__ __device__ vec3 abs(vec3 a);
+
+__host__ __device__ int max_dim(vec3 a);
+
 struct Triangle
 {
 	vec3 vertices[3];
+
+	__host__ __device__
+	vec3& operator[](int i)
+	{
+		return vertices[i];
+	}
+
+	__host__ __device__
+	const vec3& operator[](int i) const
+	{
+		return vertices[i];
+	}
 };
 
 struct Ray

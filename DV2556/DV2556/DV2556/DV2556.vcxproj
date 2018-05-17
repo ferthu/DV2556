@@ -92,12 +92,18 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="IntersectionTest.h" />
     <ClInclude Include="MollerIntersectionTest.h" />
     <ClInclude Include="TestData.h" />
+    <ClInclude Include="Watertight.h" />
     <ClInclude Include="DefineFuncs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IntersectionTest.cu" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="TestData.cu" />
+    <CudaCompile Include="TestData.cu">
+      <FileType>Document</FileType>
+    </CudaCompile>
+    <CudaCompile Include="Watertight.cu">
+      <FileType>Document</FileType>
+    </CudaCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
