@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-
 #include "TestData.h"
 
 // Parent class of individual tests

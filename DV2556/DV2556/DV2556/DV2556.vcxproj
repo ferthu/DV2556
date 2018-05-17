@@ -86,10 +86,13 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <CudaCompile Include="kernel.cu" />
+    <CudaCompile Include="MollerIntersectionTest.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IntersectionTest.h" />
+    <ClInclude Include="MollerIntersectionTest.h" />
     <ClInclude Include="TestData.h" />
+    <ClInclude Include="DefineFuncs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IntersectionTest.cu" />
