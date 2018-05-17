@@ -1,15 +1,27 @@
 #include "TestData.h"
 
+#define RANDMAX 20
+#define RANDMIN -RANDMAX
+#define FLOATRAND RANDMIN + static_cast<float> (rand()) / (static_cast<float> (RAND_MAX) / (RANDMAX - RANDMIN))
+
 TestData::TestData(float hitrate, size_t triangleCount)
 {
 	this->triangleCount = triangleCount;
 
 	Triangle* cpuTriangles = new Triangle[triangleCount];
-	// generate triangles and ray
+	// generate ray
 	Ray* cpuRay = new Ray();
 	cpuRay->origin = vec3(0.0f);
 	cpuRay->direction = vec3(0.0f, 0.0f, 1.0f);
-
+	// generate triangles (Disregarding hitrate for now)
+	srand(1);
+	for (size_t i = 0; i < triangleCount; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			cpuTriangles[i].vertices[j] = vec3(FLOATRAND, FLOATRAND, FLOATRAND);
+		}
+	}
 	// Allocate on GPU
 	cudaMalloc((void**) &triangles, triangleCount * sizeof(Triangle));	cudaMalloc((void**) &ray, sizeof(Ray));		// Copy to GPU	cudaMemcpy(cpuTriangles, triangles, triangleCount * sizeof(Triangle), cudaMemcpyHostToDevice);	cudaMemcpy(cpuRay, ray, sizeof(Ray), cudaMemcpyHostToDevice);
 
