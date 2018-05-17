@@ -29,5 +29,5 @@ protected:
 	IntersectionResult* result = nullptr;
 
 	// Runs the ray-triangle intersection test
-	virtual std::vector<IntersectionResult> test(TestData* data) = 0;
+	virtual void test(TestData* data) = 0;
 };
