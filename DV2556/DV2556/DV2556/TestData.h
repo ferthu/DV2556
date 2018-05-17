@@ -30,7 +30,27 @@ struct vec3
 	{
 		x = y = z = val;
 	}
+	__host__ __device__
+	float& operator[](int i)
+	{
+		return coords[i];
+	}
+
+	__host__ __device__
+	const float& operator[](int i) const
+	{
+		return coords[i];
+	}
 };
+
+__host__ __device__
+vec3& operator-(vec3& a, const vec3& b)
+{
+	a.x -= b.x;
+	a.y -= b.y;
+	a.z -= b.z;
+	return a;
+}
 
 __host__ __device__
 float dot(vec3 a, vec3 b)
@@ -44,9 +64,39 @@ vec3 cross(vec3 a, vec3 b)
 	return vec3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 }
 
+__host__ __device__
+vec3 abs(vec3 a)
+{
+	return vec3(+a.x, +a.y, +a.x);
+}
+
+__host__ __device__
+int max_dim(vec3 a)
+{
+	int max_dim = 0;
+
+	max_dim += ((int)(a.y > a.x && a.z > a.y)) * 2;
+
+	max_dim += ((int)(a.y > a.x && !(a.z > a.y)));
+
+	return max_dim;
+}
+
 struct Triangle
 {
 	vec3 vertices[3];
+
+	__host__ __device__
+	vec3& operator[](int i)
+	{
+		return vertices[i];
+	}
+
+	__host__ __device__
+	const vec3& operator[](int i) const
+	{
+		return vertices[i];
+	}
 };
 
 struct Ray
@@ -65,5 +115,7 @@ public:
 	// Pointers to GPU data
 	Ray* ray;
 	Triangle* triangles;
-	size_t triangleCount;
+	size_t* triangleCount;
+
+	size_t cpuTriangleCount;
 };

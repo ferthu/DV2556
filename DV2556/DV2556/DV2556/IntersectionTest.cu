@@ -9,7 +9,7 @@ std::vector<IntersectionResult> IntersectionTest::runTest(TestData* data)
 		cudaFree(result);
 	}
 
-	cudaMalloc((void**) &result, data->triangleCount * sizeof(IntersectionResult));
+	cudaMalloc((void**) &result, data->cpuTriangleCount * sizeof(IntersectionResult));
 
 	// start timer
 	test(data);

@@ -90,11 +90,13 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   <ItemGroup>
     <ClInclude Include="IntersectionTest.h" />
     <ClInclude Include="TestData.h" />
+    <ClInclude Include="Watertight.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IntersectionTest.cu" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TestData.cu" />
+    <ClCompile Include="Watertight.cu" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

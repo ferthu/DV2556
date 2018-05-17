@@ -2,6 +2,8 @@
 #include <string>
 
 #include "TestData.h"
+#include <cuda_runtime_api.h>
+#include <cuda.h>
 
 // Parent class of individual tests
 
@@ -10,6 +12,14 @@ struct IntersectionResult
 	bool hit;
 	float distance;
 	// ...
+
+	__host__ __device__
+	IntersectionResult& operator=(const IntersectionResult& rhs)
+	{
+		hit = rhs.hit;
+		distance = rhs.distance;
+		return *this;
+	}
 };
 
 class IntersectionTest
