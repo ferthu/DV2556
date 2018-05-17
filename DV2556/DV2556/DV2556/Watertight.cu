@@ -153,8 +153,8 @@ __global__ void watertightTest(Triangle* triangles, Ray* ray, size_t triangleCou
 		resultArray[index] = res;
 
 		// --------------------------------
-		resultArray[index].distance = (float)dir.z;
-		resultArray[index].distance = A[1];
+		//resultArray[index].distance = (float)dir.z;
+		//resultArray[index].distance = A[1];
 		// --------------------------------
 	}
 }

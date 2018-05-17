@@ -10,10 +10,7 @@ struct vec3
 {
 	union
 	{
-		struct
-		{
-			float x, y, z;
-		};
+		struct { float x, y, z; };
 		float coords[3];
 	};
 	__host__ __device__
