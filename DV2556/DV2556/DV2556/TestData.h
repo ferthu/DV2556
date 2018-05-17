@@ -32,6 +32,18 @@ struct vec3
 	}
 };
 
+__host__ __device__
+float dot(vec3 a, vec3 b)
+{
+	return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+__host__ __device__
+vec3 cross(vec3 a, vec3 b)
+{
+	return vec3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+}
+
 struct Triangle
 {
 	vec3 vertices[3];
