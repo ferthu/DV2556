@@ -4,6 +4,7 @@
 #include "device_launch_parameters.h"
 
 #include "Watertight.h"
+#include "DefineFuncs.h"
 
 __device__
 int sign_mask(float f)
@@ -58,9 +59,10 @@ __global__ void watertightTest(Triangle* triangles, Ray* ray, size_t* triangleCo
 		float Sz = 1.0f / dir[kz];
 
 		// Calculate vertices relative to ray origin
-		const vec3 A = triangles[index][0] - org;
-		const vec3 B = triangles[index][1] - org;
-		const vec3 C = triangles[index][2] - org;
+		vec3 A; SUB(A, triangles[index][0], org);
+		vec3 B; SUB(B, triangles[index][1], org);
+		vec3 C; SUB(C, triangles[index][2], org);
+
 
 		// Perform shear and scale of vertices
 		const float Ax = A[kx] - Sx * A[kz];
@@ -135,6 +137,6 @@ __global__ void watertightTest(Triangle* triangles, Ray* ray, size_t* triangleCo
 void Watertight::test(TestData* data)
 {
 	const int threadsPerBlock = 256;
-	const size_t blocks = data->cpuTriangleCount / threadsPerBlock;
+	const size_t blocks = data->triangleCount / threadsPerBlock;
 	//watertightTest<<<blocks, threadsPerBlock>>>(data->triangles, data->ray, data->triangleCount, result);
 }

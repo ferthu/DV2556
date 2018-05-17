@@ -2,7 +2,7 @@
 
 TestData::TestData(float hitrate, size_t triangleCount)
 {
-	cpuTriangleCount = triangleCount;
+	this->triangleCount = triangleCount;
 
 	Triangle* cpuTriangles = new Triangle[triangleCount];
 	// generate triangles and ray
@@ -11,8 +11,7 @@ TestData::TestData(float hitrate, size_t triangleCount)
 	cpuRay->direction = vec3(0.0f, 0.0f, 1.0f);
 
 	// Allocate on GPU
-	cudaMalloc((void**) &triangles, triangleCount * sizeof(Triangle));	cudaMalloc((void**) &ray, sizeof(Ray));	cudaMalloc((void**) &(this->triangleCount), sizeof(size_t));		// Copy to GPU	cudaMemcpy(cpuTriangles, triangles, triangleCount * sizeof(Triangle), cudaMemcpyHostToDevice);	cudaMemcpy(cpuRay, ray, sizeof(Ray), cudaMemcpyHostToDevice);
-	cudaMemcpy(&cpuTriangleCount, this->triangleCount, sizeof(size_t), cudaMemcpyHostToDevice);
+	cudaMalloc((void**) &triangles, triangleCount * sizeof(Triangle));	cudaMalloc((void**) &ray, sizeof(Ray));		// Copy to GPU	cudaMemcpy(cpuTriangles, triangles, triangleCount * sizeof(Triangle), cudaMemcpyHostToDevice);	cudaMemcpy(cpuRay, ray, sizeof(Ray), cudaMemcpyHostToDevice);
 
 	// Delete CPU allocations
 	delete cpuTriangles;
@@ -23,5 +22,34 @@ TestData::~TestData()
 {
 	cudaFree(ray);
 	cudaFree(triangles);
-	cudaFree(triangleCount);
+}
+
+__host__ __device__
+float dot(vec3 a, vec3 b)
+{
+	return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
+__host__ __device__
+vec3 cross(vec3 a, vec3 b)
+{
+	return vec3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
+}
+
+__host__ __device__
+vec3 abs(vec3 a)
+{
+	return vec3(+a.x, +a.y, +a.x);
+}
+
+__host__ __device__
+int max_dim(vec3 a)
+{
+	int max_dim = 0;
+
+	max_dim += ((int)(a.y > a.x && a.z > a.y)) * 2;
+
+	max_dim += ((int)(a.y > a.x && !(a.z > a.y)));
+
+	return max_dim;
 }

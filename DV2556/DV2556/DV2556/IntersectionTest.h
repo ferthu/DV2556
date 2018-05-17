@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-
 #include "TestData.h"
 #include <cuda_runtime_api.h>
 #include <cuda.h>
