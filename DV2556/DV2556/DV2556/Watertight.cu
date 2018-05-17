@@ -1,7 +1,4 @@
-#include <limits>
-
-#include "cuda_runtime.h"
-#include "device_launch_parameters.h"
+#include <cfloat>
 
 #include "Watertight.h"
 #include "DefineFuncs.h"
@@ -27,16 +24,38 @@ float xorf(float f, int mask)
 	return *reinterpret_cast<float*>(&res);
 }
 
-__global__ void watertightTest(Triangle* triangles, Ray* ray, size_t* triangleCount, IntersectionResult* resultArray)
+__device__
+vec3 abs(vec3 a)
+{
+	vec3 res;
+	res.x = (a.x > 0.0f) ? a.x : -a.x;
+	res.y = (a.y > 0.0f) ? a.y : -a.y;
+	res.z = (a.z > 0.0f) ? a.z : -a.z;
+	return res;
+}
+
+__device__
+int max_dim(vec3 a)
+{
+	int max_dim = 0;
+
+	if (a.y > a.x && a.z > a.y) max_dim += 2;
+
+	else if (a.y > a.x) max_dim++;
+
+	return max_dim;
+}
+
+__global__ void watertightTest(Triangle* triangles, Ray* ray, size_t triangleCount, IntersectionResult* resultArray)
 {
 	size_t index = threadIdx.x + blockIdx.x * blockDim.x;
 
-	if (index < *triangleCount)
+	if (index < triangleCount)
 	{
 		// Get triangle and ray data
 		IntersectionResult res;
 		res.hit = false;
-		res.distance = std::numeric_limits<float>::max();
+		res.distance = FLT_MAX;
 		vec3 dir = ray->direction;
 		vec3 org = ray->origin;
 
@@ -62,7 +81,6 @@ __global__ void watertightTest(Triangle* triangles, Ray* ray, size_t* triangleCo
 		vec3 A; SUB(A, triangles[index][0], org);
 		vec3 B; SUB(B, triangles[index][1], org);
 		vec3 C; SUB(C, triangles[index][2], org);
-
 
 		// Perform shear and scale of vertices
 		const float Ax = A[kx] - Sx * A[kz];
@@ -138,5 +156,5 @@ void Watertight::test(TestData* data)
 {
 	const int threadsPerBlock = 256;
 	const size_t blocks = data->triangleCount / threadsPerBlock;
-	//watertightTest<<<blocks, threadsPerBlock>>>(data->triangles, data->ray, data->triangleCount, result);
+	watertightTest<<<blocks, threadsPerBlock>>>(data->triangles, data->ray, data->triangleCount, result);
 }
