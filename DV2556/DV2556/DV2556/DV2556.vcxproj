@@ -97,7 +97,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="IntersectionTest.cu" />
-    <CudaCompile Include="main.cu" />
+    <ClCompile Include="main.cpp" />
     <CudaCompile Include="TestData.cu">
       <FileType>Document</FileType>
     </CudaCompile>
