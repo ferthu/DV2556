@@ -1,4 +1,5 @@
 #include "TestData.h"
+#include <iostream>
 
 #define RANDMAX 20
 #define RANDMIN -RANDMAX
@@ -22,8 +23,13 @@ TestData::TestData(float hitrate, size_t triangleCount)
 			cpuTriangles[i].vertices[j] = vec3(FLOATRAND, FLOATRAND, FLOATRAND);
 		}
 	}
-	// Allocate on GPU
-	cudaMalloc((void**) &triangles, triangleCount * sizeof(Triangle));	cudaMalloc((void**) &ray, sizeof(Ray));		// Copy to GPU	cudaMemcpy(triangles, cpuTriangles, triangleCount * sizeof(Triangle), cudaMemcpyHostToDevice);	cudaMemcpy(ray, cpuRay, sizeof(Ray), cudaMemcpyHostToDevice);
+
+	// Keeping the cudaMallocs and cudaMemcpys in separate functions seems to prevent them from failing
+	// Triangles
+	prepareTriangles(cpuTriangles);
+
+	// Ray
+	prepareRay(cpuRay);
 
 	// Delete CPU allocations
 	delete cpuTriangles;
@@ -34,6 +40,16 @@ TestData::~TestData()
 {
 	cudaFree(ray);
 	cudaFree(triangles);
+}
+
+void TestData::prepareTriangles(Triangle* cpuTriangles)
+{
+	cudaMalloc((void**)&triangles, triangleCount * sizeof(Triangle));	cudaMemcpy(triangles, cpuTriangles, triangleCount * sizeof(Triangle), cudaMemcpyKind::cudaMemcpyHostToDevice);
+}
+
+void TestData::prepareRay(Ray* cpuRay)
+{
+	cudaMalloc((void**)&ray, sizeof(Ray));	cudaMemcpy(ray, cpuRay, sizeof(Ray), cudaMemcpyKind::cudaMemcpyHostToDevice);
 }
 
 __host__ __device__

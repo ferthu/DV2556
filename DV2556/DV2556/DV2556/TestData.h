@@ -82,4 +82,8 @@ public:
 	Ray* ray;
 	Triangle* triangles;
 	size_t triangleCount;
+
+private:
+	void prepareTriangles(Triangle* cpuTriangles);
+	void prepareRay(Ray* cpuTriangles);
 };
