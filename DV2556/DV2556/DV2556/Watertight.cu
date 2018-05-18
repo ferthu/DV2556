@@ -6,12 +6,19 @@
 __device__
 int sign_mask(float f)
 {
-	float nf = -f;
-	
-	int* pf = reinterpret_cast<int*>(&f);
-	int* pnf = reinterpret_cast<int*>(&nf);
+	float n = 1.0f;
+	float nn = -n;
 
-	return *pf ^ *pnf;
+	int* pn = reinterpret_cast<int*>(&n);
+	int* pnn = reinterpret_cast<int*>(&nn);
+
+	// mask is the bit difference of n and nn, only the sign bit is 1, the rest are 0
+	int mask = *pn ^ *pnn;
+
+	int* pf = reinterpret_cast<int*>(&f);
+
+	// Return the sign bit of f
+	return *pf & mask;
 }
 
 __device__
@@ -39,9 +46,20 @@ int max_dim(vec3 a)
 {
 	int max_dim = 0;
 
-	if (a.y > a.x && a.z > a.y) max_dim += 2;
-
-	else if (a.y > a.x) max_dim++;
+	if (a.y > a.x)
+	{
+		if (a.z > a.y)
+			max_dim = 2;
+		else
+			max_dim = 1;
+	}
+	else
+	{
+		if (a.z > a.x)
+			max_dim = 2;
+		else
+			max_dim = 0;
+	}
 
 	return max_dim;
 }
@@ -60,6 +78,7 @@ __global__ void watertightTest(Triangle* triangles, Ray* ray, size_t triangleCou
 		res.distance = FLT_MAX;
 		vec3 dir = ray->direction;
 		vec3 org = ray->origin;
+
 
 		// Calculate dimension where the ray direction is maximal
 		int kz = max_dim(abs(dir));
@@ -151,17 +170,12 @@ __global__ void watertightTest(Triangle* triangles, Ray* ray, size_t triangleCou
 		res.hit = true;
 
 		resultArray[index] = res;
-
-		// --------------------------------
-		//resultArray[index].distance = (float)dir.z;
-		//resultArray[index].distance = A[1];
-		// --------------------------------
 	}
 }
 
 void Watertight::test(TestData* data)
 {
-	const int threadsPerBlock = 256;
+	const int threadsPerBlock = 10;
 	size_t blocks = data->triangleCount / threadsPerBlock;
 	if (blocks == 0) blocks = 1;
 	watertightTest<<<blocks, threadsPerBlock>>>(data->triangles, data->ray, data->triangleCount, result);
