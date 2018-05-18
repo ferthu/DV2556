@@ -17,7 +17,7 @@ __global__ void GPUMollerIntersectionTests(Ray * ray, Triangle * tri, Intersecti
 	while (index < triCount)
 	{
 		float t;
-		if (MollerIntersectTriangle(*ray, tri[index], &t) == 0)
+		if (MollerIntersectTriangle(*ray, tri[index], &t) == 1)
 		{
 			res[index].hit = true;
 			res[index].distance = t;
