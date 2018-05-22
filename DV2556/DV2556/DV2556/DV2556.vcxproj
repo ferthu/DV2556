@@ -91,6 +91,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   <ItemGroup>
     <ClInclude Include="IntersectionTest.h" />
     <ClInclude Include="MollerIntersectionTest.h" />
+    <ClInclude Include="StopWatch.h" />
     <ClInclude Include="TestData.h" />
     <ClInclude Include="Watertight.h" />
     <ClInclude Include="DefineFuncs.h" />
@@ -98,6 +99,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   <ItemGroup>
     <ClCompile Include="IntersectionTest.cu" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="StopWatch.cpp" />
     <CudaCompile Include="TestData.cu">
       <FileType>Document</FileType>
     </CudaCompile>

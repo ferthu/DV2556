@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "TestData.h"
+#include "StopWatch.h"
 #include <cuda_runtime_api.h>
 #include <cuda.h>
 
@@ -21,11 +22,17 @@ struct IntersectionResult
 	}
 };
 
+struct TestResult
+{
+	float duration = 0.0f;
+	std::vector<IntersectionResult> intersectionResults;
+};
+
 class IntersectionTest
 {
 public:
 	// Calls collectData, then starts timer and calls test(), writes results to file
-	std::vector<IntersectionResult> runTest(TestData* data);
+	TestResult runTest(TestData* data);
 
 	virtual ~IntersectionTest();
 

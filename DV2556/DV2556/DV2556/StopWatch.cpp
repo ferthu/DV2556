@@ -8,7 +8,7 @@ void StopWatch::start()
 float StopWatch::getTimeInSeconds()
 {
 	clock_t difference = clock() - s;
-	return difference / CLOCKS_PER_SEC;
+	return (float)difference / CLOCKS_PER_SEC;
 }
 
 int StopWatch::getTimeInMilliSeconds()

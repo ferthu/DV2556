@@ -22,18 +22,18 @@ float calcHitrate(std::vector<IntersectionResult> &res)
 
 int main()
 {
-	TestData data(0.1f, 1000);
+	TestData data(0.1f, 100000);
 
 	Watertight wt;
 
-	std::vector<IntersectionResult> res = wt.runTest(&data);
+	TestResult res = wt.runTest(&data);
 
-	printf("Watertight hitrate: %f\n", calcHitrate(res));
+	printf("Watertight\n Hitrate: %f\n Time: %f s\n\n", calcHitrate(res.intersectionResults), res.duration);
 
 	MollerIntersectionTest moller;
-	std::vector<IntersectionResult> resMoller = moller.runTest(&data);
+	TestResult resMoller = moller.runTest(&data);
 	
-	printf("Moller hitrate: %f\n", calcHitrate(resMoller));
+	printf("Moller\n Hitrate: %f\n Time: %f s\n\ns", calcHitrate(resMoller.intersectionResults), resMoller.duration);
 
 	getchar();
 }

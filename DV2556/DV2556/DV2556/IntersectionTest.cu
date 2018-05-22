@@ -1,8 +1,10 @@
 #include "IntersectionTest.h"
 
-std::vector<IntersectionResult> IntersectionTest::runTest(TestData* data)
+TestResult IntersectionTest::runTest(TestData* data)
 {
-	std::vector<IntersectionResult> resultVector(data->triangleCount);
+	TestResult retResult;
+	retResult.intersectionResults.resize(data->triangleCount);
+	//std::vector<IntersectionResult> resultVector(data->triangleCount);
 
 	if (result != nullptr)
 	{
@@ -12,14 +14,18 @@ std::vector<IntersectionResult> IntersectionTest::runTest(TestData* data)
 	cudaMalloc((void**) &result, data->triangleCount * sizeof(IntersectionResult));
 
 	// start timer
+	StopWatch sw;
+	sw.start();
+
 	test(data);
 	cudaDeviceSynchronize();
 	// end timer
-
+	retResult.duration = sw.getTimeInSeconds();
 	// collect results
-	cudaMemcpy(resultVector.data(), result, data->triangleCount * sizeof(IntersectionResult), cudaMemcpyKind::cudaMemcpyDeviceToHost);
+	cudaMemcpy(retResult.intersectionResults.data(), result, data->triangleCount * sizeof(IntersectionResult), cudaMemcpyKind::cudaMemcpyDeviceToHost);
 
-	return resultVector;
+
+	return retResult;
 }
 
 
