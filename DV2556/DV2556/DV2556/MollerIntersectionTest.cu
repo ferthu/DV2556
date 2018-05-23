@@ -33,7 +33,8 @@ __global__ void GPUMollerIntersectionTests(Ray * ray, Triangle * tri, Intersecti
 
 //Intersection test functions on GPU and defines
 #define EPSILON 1e-5
-#define TEST_CULL
+//#define BACK_FACE_CULL
+#define BEHIND_CULL
 __device__ int MollerIntersectTriangle(Ray ray, Triangle tri, float * t)
 {
 	vec3 edge1, edge2, tvec, pvec, qvec;
@@ -49,12 +50,17 @@ __device__ int MollerIntersectTriangle(Ray ray, Triangle tri, float * t)
 	//if determinant is near zero, ray lies in plane of triangle
 	det = DOT(edge1, pvec);
 
-#ifdef TEST_CULL
+#ifdef BACK_FACE_CULL
 	if (det < EPSILON)
 		return 0;
 	
 	//calculate distance from vert0 to ray origin
 	SUB(tvec, ray.origin, tri.vertices[0]);
+
+#ifdef BEHIND_CULL
+	if (DOT(tvec, ray.direction) < 0.0f)
+		return 0;
+#endif
 
 	//calculate U parameter and test bounds
 	u = DOT(tvec, pvec);
@@ -80,11 +86,16 @@ __device__ int MollerIntersectTriangle(Ray ray, Triangle tri, float * t)
 #else
 	if (det > -EPSILON && det < EPSILON)
 		return 0;
-	inv_det = 1 / det;
+	inv_det = 1.0f / det;
 
 	//calculate distance from vert0 to ray origin
 	SUB(tvec, ray.origin, tri.vertices[0]);
-	u = DOT(tvec, pvec);
+
+#ifdef BEHIND_CULL
+	if (DOT(tvec, ray.direction) < 0.0f)
+		return 0;
+#endif
+	u = DOT(tvec, pvec) * inv_det;
 	if (u < 0.0f || u > 1.0f)
 		return 0;
 

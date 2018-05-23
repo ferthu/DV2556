@@ -39,6 +39,7 @@ int main()
 	TestResult res = wt.runTest(&data);
 
 	printf("Watertight\n Hitrate: %f\n Time: %f s\n\n", calcHitrate(res.intersectionResults), res.duration);
+	saveTestResult(res, "WatertightResult.txt");
 
 	MollerIntersectionTest moller;
 	TestResult resMoller = moller.runTest(&data);
@@ -50,6 +51,6 @@ int main()
 	TestResult resBaldwin = baldwin.runTest(&data);
 
 	printf("Baldwin\n Hitrate: %f\n Time: %f s\n\n", calcHitrate(resBaldwin.intersectionResults), resBaldwin.duration);
-
+	saveTestResult(resBaldwin, "BaldwinResult.txt");
 	getchar();
 }
