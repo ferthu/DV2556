@@ -65,6 +65,11 @@ struct Triangle
 	}
 };
 
+struct BaldwinTransformation
+{
+	float transformation[12];
+};
+
 struct Ray
 {
 	vec3 origin;
@@ -81,9 +86,11 @@ public:
 	// Pointers to GPU data
 	Ray* ray;
 	Triangle* triangles;
+	BaldwinTransformation* baldwinTransformations;
 	size_t triangleCount;
 
 private:
 	void prepareTriangles(Triangle* cpuTriangles);
+	void prepareBaldwinTransformations(BaldwinTransformation* cpuBaldwinTransformation);
 	void prepareRay(Ray* cpuTriangles);
 };
