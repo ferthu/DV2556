@@ -46,20 +46,11 @@ int max_dim(vec3 a)
 {
 	int max_dim = 0;
 
-	if (a.y > a.x)
-	{
-		if (a.z > a.y)
-			max_dim = 2;
-		else
-			max_dim = 1;
-	}
-	else
-	{
-		if (a.z > a.x)
-			max_dim = 2;
-		else
-			max_dim = 0;
-	}
+	if (a[max_dim] < a[1])
+		max_dim = 1;
+
+	if (a[max_dim] < a[2])
+		max_dim = 2;
 
 	return max_dim;
 }
@@ -175,7 +166,7 @@ __global__ void watertightTest(Triangle* triangles, Ray* ray, size_t triangleCou
 
 void Watertight::test(TestData* data)
 {
-	const int threadsPerBlock = 10;
+	const int threadsPerBlock = 256;
 	size_t blocks = (data->triangleCount + threadsPerBlock - 1) / threadsPerBlock;
 	watertightTest<<<blocks, threadsPerBlock>>>(data->triangles, data->ray, data->triangleCount, result);
 }
