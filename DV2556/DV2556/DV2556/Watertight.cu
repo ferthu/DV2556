@@ -176,7 +176,6 @@ __global__ void watertightTest(Triangle* triangles, Ray* ray, size_t triangleCou
 void Watertight::test(TestData* data)
 {
 	const int threadsPerBlock = 10;
-	size_t blocks = data->triangleCount / threadsPerBlock;
-	if (blocks == 0) blocks = 1;
+	size_t blocks = (data->triangleCount + threadsPerBlock - 1) / threadsPerBlock;
 	watertightTest<<<blocks, threadsPerBlock>>>(data->triangles, data->ray, data->triangleCount, result);
 }
