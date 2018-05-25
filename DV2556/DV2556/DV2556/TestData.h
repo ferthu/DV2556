@@ -88,6 +88,8 @@ public:
 	Triangle* triangles;
 	BaldwinTransformation* baldwinTransformations;
 	size_t triangleCount;
+	float triangleUploadTime = 0.0f;
+	float baldwinTransformationUploadTime = 0.0f;
 
 private:
 	void prepareTriangles(Triangle* cpuTriangles);

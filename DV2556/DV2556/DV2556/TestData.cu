@@ -1,5 +1,6 @@
 #include "TestData.h"
 #include "DefineFuncs.h"
+#include "StopWatch.h"
 #include <iostream>
 
 #define RANDMAX 20
@@ -140,17 +141,32 @@ TestData::~TestData()
 
 void TestData::prepareTriangles(Triangle* cpuTriangles)
 {
+	StopWatch sw;
+	sw.start();
+
 	cudaMalloc((void**)&triangles, triangleCount * sizeof(Triangle));	cudaMemcpy(triangles, cpuTriangles, triangleCount * sizeof(Triangle), cudaMemcpyKind::cudaMemcpyHostToDevice);
+
+	triangleUploadTime += sw.getTimeInSeconds();
 }
 
 void TestData::prepareBaldwinTransformations(BaldwinTransformation* cpuBaldwinTransformations)
 {
+	StopWatch sw;
+	sw.start();
+
 	cudaMalloc((void**)&baldwinTransformations, triangleCount * sizeof(BaldwinTransformation));	cudaMemcpy(baldwinTransformations, cpuBaldwinTransformations, triangleCount * sizeof(BaldwinTransformation), cudaMemcpyKind::cudaMemcpyHostToDevice);
+
+	baldwinTransformationUploadTime += sw.getTimeInSeconds();
 }
 
 void TestData::prepareRay(Ray* cpuRay)
 {
+	StopWatch sw;
+	sw.start();
+
 	cudaMalloc((void**)&ray, sizeof(Ray));	cudaMemcpy(ray, cpuRay, sizeof(Ray), cudaMemcpyKind::cudaMemcpyHostToDevice);
+
+	triangleUploadTime += sw.getTimeInSeconds();
 }
 
 __host__ __device__
