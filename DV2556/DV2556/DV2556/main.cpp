@@ -21,12 +21,19 @@ float calcHitrate(std::vector<IntersectionResult> &res)
 	return sum / ((float)res.size());
 }
 
-void saveTestResult(TestResult &res, std::string fileName)
+void saveTestResult(TestResult &res, std::string fileName, int iter)
 {
 	std::fstream fs;
-	fs.open(fileName, std::fstream::out);
-	fs << "#\tHitrate\tDuration" << std::endl;
-	fs << "1\t" << calcHitrate(res.intersectionResults) << "\t" << res.duration << std::endl;
+	fs.open(fileName, std::fstream::out | std::fstream::app);
+	fs << iter << "\t" << calcHitrate(res.intersectionResults) << "\t" << res.duration << std::endl;
+	fs.close();
+}
+
+void resetFile(std::string fileName)
+{
+	std::fstream fs;
+	fs.open(fileName, std::fstream::out | std::fstream::trunc);
+	fs << "Iter\tHitrate\tDuration" << std::endl;
 	fs.close();
 }
 
@@ -38,6 +45,8 @@ void saveUploadTimes(TestData &data, std::string fileName)
 	fs << data.triangleUploadTime << "\t" << data.baldwinTransformationUploadTime << std::endl;
 	fs.close();
 }
+
+#define NUMBER_OF_RUNS 10
 
 int main()
 {
@@ -53,23 +62,31 @@ int main()
 	data = new TestData(0.1f, 10000000);
 	saveUploadTimes(*data, "UploadTimes.txt");
 
-	Watertight wt;
-	TestResult res = wt.runTest(data);
+	//Clear previous results in result files
+	resetFile("WatertightResult.txt");
+	resetFile("MollerResult.txt");
+	resetFile("BaldwinResult.txt");
 
-	printf("Watertight\n Hitrate: %f\n Time: %f s\n\n", calcHitrate(res.intersectionResults), res.duration);
-	saveTestResult(res, "WatertightResult.txt");
+	for (int i = 0; i < NUMBER_OF_RUNS; i++)
+	{
+		Watertight wt;
+		TestResult res = wt.runTest(data);
 
-	MollerIntersectionTest moller;
-	TestResult resMoller = moller.runTest(data);
-	
-	printf("Moller\n Hitrate: %f\n Time: %f s\n\n", calcHitrate(resMoller.intersectionResults), resMoller.duration);
-	saveTestResult(resMoller, "MollerResult.txt");
+		printf("Watertight\n Hitrate: %f\n Time: %f s\n\n", calcHitrate(res.intersectionResults), res.duration);
+		saveTestResult(res, "WatertightResult.txt", i);
 
-	BaldwinIntersectionTest baldwin;
-	TestResult resBaldwin = baldwin.runTest(data);
+		MollerIntersectionTest moller;
+		TestResult resMoller = moller.runTest(data);
 
-	printf("Baldwin\n Hitrate: %f\n Time: %f s\n\n", calcHitrate(resBaldwin.intersectionResults), resBaldwin.duration);
-	saveTestResult(resBaldwin, "BaldwinResult.txt");
+		printf("Moller\n Hitrate: %f\n Time: %f s\n\n", calcHitrate(resMoller.intersectionResults), resMoller.duration);
+		saveTestResult(resMoller, "MollerResult.txt", i);
+
+		BaldwinIntersectionTest baldwin;
+		TestResult resBaldwin = baldwin.runTest(data);
+
+		printf("Baldwin\n Hitrate: %f\n Time: %f s\n\n", calcHitrate(resBaldwin.intersectionResults), resBaldwin.duration);
+		saveTestResult(resBaldwin, "BaldwinResult.txt", i);
+	}
 	getchar();
 
 	delete data;
