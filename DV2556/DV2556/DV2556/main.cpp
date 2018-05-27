@@ -50,7 +50,7 @@ int main()
 	delete data;
 
 	// Real test
-	data = new TestData(0.1f, 50000000);
+	data = new TestData(0.1f, 10000000);
 	saveUploadTimes(*data, "UploadTimes.txt");
 
 	Watertight wt;
@@ -63,7 +63,7 @@ int main()
 	TestResult resMoller = moller.runTest(data);
 	
 	printf("Moller\n Hitrate: %f\n Time: %f s\n\n", calcHitrate(resMoller.intersectionResults), resMoller.duration);
-	saveTestResult(resMoller, "M�llerResult.txt");
+	saveTestResult(resMoller, "MollerResult.txt");
 
 	BaldwinIntersectionTest baldwin;
 	TestResult resBaldwin = baldwin.runTest(data);
