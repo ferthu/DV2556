@@ -13,3 +13,4 @@ protected:
 };
 
 __global__ void watertightTest(Triangle* triangles, Ray* ray, size_t triangleCount, IntersectionResult* resultArray);
+__device__ int watertightIntersectTriangle(Ray ray, Triangle tri, float* t);

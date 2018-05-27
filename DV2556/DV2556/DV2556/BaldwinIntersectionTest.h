@@ -13,3 +13,4 @@ protected:
 };
 
 __global__ void baldwinTest(Triangle* triangles, BaldwinTransformation* transformations, Ray* ray, size_t triangleCount, IntersectionResult* resultArray);
+__device__ int baldwinIntersectTriangle(Ray ray, Triangle tri, BaldwinTransformation trf, float* t);

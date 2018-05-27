@@ -1,9 +1,6 @@
 #include "MollerIntersectionTest.h"
 #include "DefineFuncs.h"
 
-#define NUM_BLOCKS 32
-#define NUM_THREADSPERBLOCK 256
-
 
 void MollerIntersectionTest::test(TestData * data)
 {

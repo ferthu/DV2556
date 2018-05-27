@@ -42,7 +42,7 @@ void saveUploadTimes(TestData &data, std::string fileName)
 int main()
 {
 	// Warmup
-	TestData* data = new TestData(0.1f, 5000000);
+	TestData* data = new TestData(0.1f, 500000);
 
 	Watertight warmup;
 	TestResult warmupRes = warmup.runTest(data);
