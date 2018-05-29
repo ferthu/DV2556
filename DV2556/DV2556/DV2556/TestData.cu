@@ -7,6 +7,28 @@
 #define RANDMIN -RANDMAX
 #define FLOATRAND RANDMIN + static_cast<float> (rand()) / (static_cast<float> (RAND_MAX) / (RANDMAX - RANDMIN))
 
+int max_dim(vec3 a)
+{
+	int max_dim = 0;
+
+	if (a[max_dim] < a[1])
+		max_dim = 1;
+
+	if (a[max_dim] < a[2])
+		max_dim = 2;
+
+	return max_dim;
+}
+
+vec3 abs(vec3 a)
+{
+	vec3 res;
+	res.x = (a.x > 0.0f) ? a.x : -a.x;
+	res.y = (a.y > 0.0f) ? a.y : -a.y;
+	res.z = (a.z > 0.0f) ? a.z : -a.z;
+	return res;
+}
+
 TestData::TestData(float hitrate, size_t triangleCount)
 {
 	this->triangleCount = triangleCount;
@@ -17,6 +39,27 @@ TestData::TestData(float hitrate, size_t triangleCount)
 	Ray* cpuRay = new Ray();
 	cpuRay->origin = vec3(0.0f);
 	cpuRay->direction = vec3(0.0f, 0.0f, 1.0f);
+
+	// Ray transformation for watertight test --------------------
+	cpuRay->kz = max_dim(abs(cpuRay->direction));
+	cpuRay->kx = cpuRay->kz + 1; if (cpuRay->kx == 3) cpuRay->kx = 0;
+	cpuRay->ky = cpuRay->kx + 1; if (cpuRay->ky == 3) cpuRay->ky = 0;
+
+	// Swap kx and ky dimension to preserve winding direction of triangles
+	if (cpuRay->direction[cpuRay->kz] < 0.0f)
+	{
+		int temp = cpuRay->kx;
+		cpuRay->kx = cpuRay->ky;
+		cpuRay->ky = temp;
+	}
+
+	// Calculate shear constants
+	cpuRay->Sx = cpuRay->direction[cpuRay->kx] / cpuRay->direction[cpuRay->kz];
+	cpuRay->Sy = cpuRay->direction[cpuRay->ky] / cpuRay->direction[cpuRay->kz];
+	cpuRay->Sz = 1.0f / cpuRay->direction[cpuRay->kz];
+	// -----------------------------------------------------------
+
+
 	// generate triangles (Disregarding hitrate for now)
 	srand(1);
 	for (size_t i = 0; i < triangleCount; i++)

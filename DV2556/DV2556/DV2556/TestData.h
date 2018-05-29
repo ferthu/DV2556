@@ -74,6 +74,8 @@ struct Ray
 {
 	vec3 origin;
 	vec3 direction;
+	int kx, ky, kz;
+	float Sx, Sy, Sz;
 };
 
 class TestData

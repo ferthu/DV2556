@@ -59,7 +59,7 @@ int main()
 	delete data;
 
 	// Real test
-	data = new TestData(0.1f, 10000000);
+	data = new TestData(0.1f, 80000000);
 	saveUploadTimes(*data, "UploadTimes.txt");
 
 	//Clear previous results in result files

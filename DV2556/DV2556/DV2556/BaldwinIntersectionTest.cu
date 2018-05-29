@@ -36,7 +36,12 @@ __device__ int baldwinIntersectTriangle(Ray ray, Triangle tri, BaldwinTransforma
 	vec3 v1 = tri[1];
 	vec3 v2 = tri[2];
 
-	float* transformation = trf.transformation;
+	float transformation[12];// = trf.transformation;
+
+	for (int i = 0; i < 12; i++)
+	{
+		transformation[i] = trf.transformation[i];
+	}
 
 	// Get barycentric z components of ray origin and direction for calculation of t value
 

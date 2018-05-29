@@ -6,7 +6,7 @@
 #include <cuda.h>
 
 // Parent class of individual tests
-#define NUM_BLOCKS 32
+#define NUM_BLOCKS 256
 #define NUM_THREADSPERBLOCK 256
 
 struct IntersectionResult

@@ -6,12 +6,13 @@ TestResult IntersectionTest::runTest(TestData* data)
 	retResult.intersectionResults.resize(data->triangleCount);
 	//std::vector<IntersectionResult> resultVector(data->triangleCount);
 
-	if (result != nullptr)
-	{
-		cudaFree(result);
-	}
-
-	cudaMalloc((void**) &result, data->triangleCount * sizeof(IntersectionResult));
+	//if (result != nullptr)
+	//{
+	//	cudaFree(result);
+	//}
+	
+	if (result == nullptr)
+		cudaMalloc((void**) &result, data->triangleCount * sizeof(IntersectionResult));
 
 	// start timer
 	StopWatch sw;
