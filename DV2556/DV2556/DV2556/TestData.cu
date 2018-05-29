@@ -89,71 +89,68 @@ TestData::TestData(float hitrate, size_t triangleCount)
 		float x1, x2;
 		float num = DOT(v0, normal);                 // Element (3,4) of each transformation matrix
 
-		if (fabs(normal[0]) > fabs(normal[1]) && fabs(normal[0]) > fabs(normal[2]))
-		{
+		if (fabs(normal[0]) > fabs(normal[1]) && fabs(normal[0]) > fabs(normal[2])) {
+
 			x1 = v1[1] * v0[2] - v1[2] * v0[1];
 			x2 = v2[1] * v0[2] - v2[2] * v0[1];
 
-			// Do matrix set up here for when a = 1, b = c = 0 formula
+			//Do matrix set up here for when a = 1, b = c = 0 formula
 
-			cpuBaldwinTransformations[i].transformation[0] = 0.0f;
-			cpuBaldwinTransformations[i].transformation[1] = edge2[2] / normal[0];
-			cpuBaldwinTransformations[i].transformation[2] = -edge2[1] / normal[0];
-			cpuBaldwinTransformations[i].transformation[3] = x2 / normal[0];
+			cpuBaldwinTransformations[i].fixedColumn = 1;
 
-			cpuBaldwinTransformations[i].transformation[4] = 0.0f;
-			cpuBaldwinTransformations[i].transformation[5] = -edge1[2] / normal[0];
-			cpuBaldwinTransformations[i].transformation[6] = edge1[1] / normal[0];
-			cpuBaldwinTransformations[i].transformation[7] = -x1 / normal[0];
+			cpuBaldwinTransformations[i].transformation[0] = edge2[2] / normal[0];
+			cpuBaldwinTransformations[i].transformation[1] = -edge2[1] / normal[0];
+			cpuBaldwinTransformations[i].transformation[2] = x2 / normal[0];
 
-			cpuBaldwinTransformations[i].transformation[8] = 1.0f;
-			cpuBaldwinTransformations[i].transformation[9] = normal[1] / normal[0];
-			cpuBaldwinTransformations[i].transformation[10] = normal[2] / normal[0];
-			cpuBaldwinTransformations[i].transformation[11] = -num / normal[0];
+			cpuBaldwinTransformations[i].transformation[3] = -edge1[2] / normal[0];
+			cpuBaldwinTransformations[i].transformation[4] = edge1[1] / normal[0];
+			cpuBaldwinTransformations[i].transformation[5] = -x1 / normal[0];
+
+			cpuBaldwinTransformations[i].transformation[6] = normal[1] / normal[0];
+			cpuBaldwinTransformations[i].transformation[7] = normal[2] / normal[0];
+			cpuBaldwinTransformations[i].transformation[8] = -num / normal[0];
 		}
-		else if (fabs(normal[1]) > fabs(normal[2]))
-		{
+		else if (fabs(normal[1]) > fabs(normal[2])) {
+
 			x1 = v1[2] * v0[0] - v1[0] * v0[2];
 			x2 = v2[2] * v0[0] - v2[0] * v0[2];
 
 			// b = 1 case
 
+			cpuBaldwinTransformations[i].fixedColumn = 2;
+
 			cpuBaldwinTransformations[i].transformation[0] = -edge2[2] / normal[1];
-			cpuBaldwinTransformations[i].transformation[1] = 0.0f;
-			cpuBaldwinTransformations[i].transformation[2] = edge2[0] / normal[1];
-			cpuBaldwinTransformations[i].transformation[3] = x2 / normal[1];
-			
-			cpuBaldwinTransformations[i].transformation[4] = edge1[2] / normal[1];
-			cpuBaldwinTransformations[i].transformation[5] = 0.0f;
-			cpuBaldwinTransformations[i].transformation[6] = -edge1[0] / normal[1];
-			cpuBaldwinTransformations[i].transformation[7] = -x1 / normal[1];
-			
-			cpuBaldwinTransformations[i].transformation[8] = normal[0] / normal[1];
-			cpuBaldwinTransformations[i].transformation[9] = 1.0f;
-			cpuBaldwinTransformations[i].transformation[10] = normal[2] / normal[1];
-			cpuBaldwinTransformations[i].transformation[11] = -num / normal[1];
+			cpuBaldwinTransformations[i].transformation[1] = edge2[0] / normal[1];
+			cpuBaldwinTransformations[i].transformation[2] = x2 / normal[1];
+
+			cpuBaldwinTransformations[i].transformation[3] = edge1[2] / normal[1];
+			cpuBaldwinTransformations[i].transformation[4] = -edge1[0] / normal[1];
+			cpuBaldwinTransformations[i].transformation[5] = -x1 / normal[1];
+
+			cpuBaldwinTransformations[i].transformation[6] = normal[0] / normal[1];
+			cpuBaldwinTransformations[i].transformation[7] = normal[2] / normal[1];
+			cpuBaldwinTransformations[i].transformation[8] = -num / normal[1];
 		}
-		else if (fabs(normal[2]) > 0.0f)
-		{
+		else if (fabs(normal[2]) > 0.0f) {
+
 			x1 = v1[0] * v0[1] - v1[1] * v0[0];
 			x2 = v2[0] * v0[1] - v2[1] * v0[0];
 
 			// c = 1 case
 
+			cpuBaldwinTransformations[i].fixedColumn = 3;
+
 			cpuBaldwinTransformations[i].transformation[0] = edge2[1] / normal[2];
 			cpuBaldwinTransformations[i].transformation[1] = -edge2[0] / normal[2];
-			cpuBaldwinTransformations[i].transformation[2] = 0.0f;
-			cpuBaldwinTransformations[i].transformation[3] = x2 / normal[2];
-			
-			cpuBaldwinTransformations[i].transformation[4] = -edge1[1] / normal[2];
-			cpuBaldwinTransformations[i].transformation[5] = edge1[0] / normal[2];
-			cpuBaldwinTransformations[i].transformation[6] = 0.0f;
-			cpuBaldwinTransformations[i].transformation[7] = -x1 / normal[2];
-			
-			cpuBaldwinTransformations[i].transformation[8] = normal[0] / normal[2];
-			cpuBaldwinTransformations[i].transformation[9] = normal[1] / normal[2];
-			cpuBaldwinTransformations[i].transformation[10] = 1.0f;
-			cpuBaldwinTransformations[i].transformation[11] = -num / normal[2];
+			cpuBaldwinTransformations[i].transformation[2] = x2 / normal[2];
+
+			cpuBaldwinTransformations[i].transformation[3] = -edge1[1] / normal[2];
+			cpuBaldwinTransformations[i].transformation[4] = edge1[0] / normal[2];
+			cpuBaldwinTransformations[i].transformation[5] = -x1 / normal[2];
+
+			cpuBaldwinTransformations[i].transformation[6] = normal[0] / normal[2];
+			cpuBaldwinTransformations[i].transformation[7] = normal[1] / normal[2];
+			cpuBaldwinTransformations[i].transformation[8] = -num / normal[2];
 		}
 		else
 		{

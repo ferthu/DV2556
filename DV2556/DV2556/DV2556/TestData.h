@@ -67,7 +67,8 @@ struct Triangle
 
 struct BaldwinTransformation
 {
-	float transformation[12];
+	float transformation[9];
+	unsigned char fixedColumn;
 };
 
 struct Ray
